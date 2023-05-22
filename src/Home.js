@@ -12,7 +12,7 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import CustomizedTables from './components/AnimalsTable';
+import CustomizedTables from './components/AnimalsTableComponent';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineSharpIcon from '@mui/icons-material/DeleteOutlineSharp';
@@ -100,19 +100,21 @@ export default function SearchAppBar() {
         setIsDrawerOpen(false);
     }
 
+    
+
 
     const renderComponent = () => {
         if (selectedComponent === 'animalTable') {
             return <CustomizedTables />;
-        } else if (selectedComponent === 'addAnimalForm') {
+        } else if (selectedComponent === 'add') {
             return <AddAnimalForm />
-        } else if (selectedComponent === 'editAnimalForm') {
+        } else if (selectedComponent === 'edit') {
             return <EditAnimalForm />
-        } else if (selectedComponent === 'findAnimal') {
+        } else if (selectedComponent === 'find') {
             return <FindAnimal />
-        } else if (selectedComponent === 'clearAnimals') {
+        } else if (selectedComponent === 'clear') {
             return <ClearAnimals />
-        } else if (selectedComponent === 'removeAnimal') {
+        } else if (selectedComponent === 'remove') {
             return <RemoveAnimal />
         }
         return null;
@@ -161,19 +163,19 @@ export default function SearchAppBar() {
                         <TableRowsIcon />  <StyledIcon> <ListItemText primary="Mostrar tabela de Animais" /> </StyledIcon>
                     </ListItem>
 
-                    <ListItem button onClick={() => handleMenuItemClick('addAnimalForm')}>
+                    <ListItem button onClick={() => handleMenuItemClick('add')}>
                         <AddIcon /> <StyledIcon> <ListItemText primary="Adicionar animal" /> </StyledIcon>
                     </ListItem>
-                    <ListItem button onClick={() => handleMenuItemClick('editAnimalForm')}>
+                    <ListItem button onClick={() => handleMenuItemClick('edit')}>
                         <EditSharpIcon /> <StyledIcon><ListItemText primary="Editar animal" /></StyledIcon>
                     </ListItem>
-                    <ListItem button onClick={() => handleMenuItemClick('findAnimal')}>
+                    <ListItem button onClick={() => handleMenuItemClick('find')}>
                         <SearchSharpIcon />  <StyledIcon> <ListItemText primary="Encontrar animal" /></StyledIcon>
                     </ListItem>
-                    <ListItem button onClick={() => handleMenuItemClick('removeAnimal')}>
+                    <ListItem button onClick={() => handleMenuItemClick('remove')}>
                         <DeleteOutlineSharpIcon />  <StyledIcon><ListItemText primary="Remover animal" /></StyledIcon>
                     </ListItem>
-                    <ListItem button onClick={() => handleMenuItemClick('clearAnimals')}>
+                    <ListItem button onClick={() => handleMenuItemClick('clear')}>
                         <ClearSharpIcon /> <StyledIcon><ListItemText primary="Limpar todos os animais" /></StyledIcon>
                     </ListItem>
                 </List>
@@ -182,5 +184,4 @@ export default function SearchAppBar() {
         </Box>
     );
 }
-
 
