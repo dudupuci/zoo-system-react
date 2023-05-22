@@ -12,200 +12,175 @@ import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import AddIcon from '@mui/icons-material/Add';
+import CustomizedTables from './components/AnimalsTableComponent';
 import TableRowsIcon from '@mui/icons-material/TableRows';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteOutlineSharpIcon from '@mui/icons-material/DeleteOutlineSharp';
 import SearchSharpIcon from '@mui/icons-material/SearchSharp';
 import EditSharpIcon from '@mui/icons-material/EditSharp';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
-import CustomizedTables from './components/AnimalsTableComponent';
+import FormPropsTextFields from './components/AddAnimalForm';
 
 const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(1),
-    width: 'auto',
-  },
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    '&:hover': {
+        backgroundColor: alpha(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: theme.spacing(1),
+        width: 'auto',
+    },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      width: '12ch',
-      '&:focus': {
-        width: '20ch',
-      },
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '12ch',
+            '&:focus': {
+                width: '20ch',
+            },
+        },
     },
-  },
 }));
 
 const StyledIcon = styled(ListItemText)(({ theme }) => ({
-  marginLeft: '10px',
+    marginLeft: '10px',
 }));
 
-const AnimalTable = () => <div>Tabela de Animais</div>;
-const AddAnimalForm = () => <div>Formulário de Adicionar Animal</div>;
-const EditAnimalForm = () => <div>Formulário de Editar Animal</div>;
-const FindAnimal = () => <div>Encontrar Animal</div>;
-const RemoveAnimal = () => <div>Remover Animal</div>;
-const ClearAnimals = () => <div>Limpar Todos os Animais</div>;
+
+const AnimalTable = () => { }
+const AddAnimalForm = () => {
+    return <FormPropsTextFields />
+}
+const EditAnimalForm = () => {
+    return <div>Form editar animal</div>
+}
+const FindAnimal = () => {
+    return <div>Inserir UUID String e encontrar animal</div>
+}
+
+const RemoveAnimal = () => {
+    return <div>Inserir UUID String e remover animal</div>
+}
+
+const ClearAnimals = () => {
+    return <div>Limpa todos os animais do BD</div>
+}
+
 
 export default function SearchAppBar() {
-  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
-  const [selectedComponent, setSelectedComponent] = React.useState(null);
-  const [isSubMenuOpen, setIsSubMenuOpen] = React.useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
+    const [selectedComponent, setSelectedComponent] = React.useState(null);
 
-  const handleDrawerToggle = () => {
-    setIsDrawerOpen(!isDrawerOpen);
-  };
+    const handleDrawerToggle = () => {
+        setIsDrawerOpen(!isDrawerOpen);
+    };
 
-  const handleMenuItemClick = (component) => {
-    setSelectedComponent(component);
-    setIsSubMenuOpen(false);
-  };
-
-  const handleSubMenuItemClick = (component) => {
-    setSelectedComponent(component);
-    setIsDrawerOpen(false);
-  };
-
-  const handleAddAnimalClick = () => {
-    setIsSubMenuOpen(!isSubMenuOpen);
-  };
-
-  const renderComponent = () => {
-    if (selectedComponent === 'animalTable') {
-      return <CustomizedTables />;
-      setIsDrawerOpen(false);
-    } else if (selectedComponent === 'add') {
-      return <AddAnimalForm />;
-    } else if (selectedComponent === 'edit') {
-      return <EditAnimalForm />;
-    } else if (selectedComponent === 'find') {
-      return <FindAnimal />;
-    } else if (selectedComponent === 'remove') {
-      return <RemoveAnimal />;
-    } else if (selectedComponent === 'clear') {
-      return <ClearAnimals />;
+    const handleMenuItemClick = (component) => {
+        setSelectedComponent(component);
+        setIsDrawerOpen(false);
     }
-    return null;
-  };
 
-  return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-            onClick={handleDrawerToggle}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{
-              flexGrow: 1,
-              display: { xs: 'none', sm: 'block', textAlign: 'left' },
-            }}
-          >
-            Animals ZOO System v1.0.0
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-        </Toolbar>
-      </AppBar>
-      <Drawer anchor="left" open={isDrawerOpen} onClose={handleDrawerToggle}>
-        <List>
-          <ListItem button onClick={() => handleMenuItemClick('animalTable')}>
-            <TableRowsIcon />
-            <StyledIcon>
-              <ListItemText primary="Mostrar tabela de Animais" />
-            </StyledIcon>
-          </ListItem>
-          <ListItem button onClick={handleAddAnimalClick}>
-            <AddIcon />
-            <StyledIcon>
-              <ListItemText primary="Adicionar animal" />
-            </StyledIcon>
-            {isSubMenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          </ListItem>
-          {isSubMenuOpen && (
-            <List sx={{ pl: 3 }}>
-              <ListItem button onClick={() => handleSubMenuItemClick('add-dog')}>
-                <ListItemText primary="Cachorro" />
-              </ListItem>
-              <ListItem button onClick={() => handleSubMenuItemClick('add-cat')}>
-                <ListItemText primary="Gato" />
-              </ListItem>
-              <ListItem button onClick={() => handleSubMenuItemClick('add-bird')}>
-                <ListItemText primary="Pássaro" />
-              </ListItem>
-            </List>
-          )}
-          <ListItem button onClick={() => handleMenuItemClick('edit')}>
-            <EditSharpIcon />
-            <StyledIcon>
-              <ListItemText primary="Editar animal" />
-            </StyledIcon>
-          </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick('find')}>
-            <SearchSharpIcon />
-            <StyledIcon>
-              <ListItemText primary="Encontrar animal" />
-            </StyledIcon>
-          </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick('remove')}>
-            <DeleteOutlineSharpIcon />
-            <StyledIcon>
-              <ListItemText primary="Remover animal" />
-            </StyledIcon>
-          </ListItem>
-          <ListItem button onClick={() => handleMenuItemClick('clear')}>
-            <ClearSharpIcon />
-            <StyledIcon>
-              <ListItemText primary="Limpar todos os animais" />
-            </StyledIcon>
-          </ListItem>
-        </List>
-      </Drawer>
-      {renderComponent()}
-    </Box>
-  );
+
+    const renderComponent = () => {
+        if (selectedComponent === 'animalTable') {
+            return <CustomizedTables />;
+        } else if (selectedComponent === 'addAnimalForm') {
+            return <AddAnimalForm />
+        } else if (selectedComponent === 'editAnimalForm') {
+            return <EditAnimalForm />
+        } else if (selectedComponent === 'findAnimal') {
+            return <FindAnimal />
+        } else if (selectedComponent === 'clearAnimals') {
+            return <ClearAnimals />
+        } else if (selectedComponent === 'removeAnimal') {
+            return <RemoveAnimal />
+        }
+        return null;
+    }
+
+    return (
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static">
+                <Toolbar>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        sx={{ mr: 2 }}
+                        onClick={handleDrawerToggle}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        noWrap
+                        component="div"
+                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block', textAlign: 'left' } }}
+                    >
+                        Animals ZOO System v1.0.0
+                    </Typography>
+                    {/* <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search> */}
+                </Toolbar>
+            </AppBar>
+            <Drawer
+                anchor="left"
+                open={isDrawerOpen}
+                onClose={handleDrawerToggle}
+            >
+                <List>
+                    <ListItem button onClick={() => handleMenuItemClick('animalTable')}>
+                        <TableRowsIcon />  <StyledIcon> <ListItemText primary="Mostrar tabela de Animais" /> </StyledIcon>
+                    </ListItem>
+
+                    <ListItem button onClick={() => handleMenuItemClick('addAnimalForm')}>
+                        <AddIcon /> <StyledIcon> <ListItemText primary="Adicionar animal" /> </StyledIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => handleMenuItemClick('editAnimalForm')}>
+                        <EditSharpIcon /> <StyledIcon><ListItemText primary="Editar animal" /></StyledIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => handleMenuItemClick('findAnimal')}>
+                        <SearchSharpIcon />  <StyledIcon> <ListItemText primary="Encontrar animal" /></StyledIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => handleMenuItemClick('removeAnimal')}>
+                        <DeleteOutlineSharpIcon />  <StyledIcon><ListItemText primary="Remover animal" /></StyledIcon>
+                    </ListItem>
+                    <ListItem button onClick={() => handleMenuItemClick('clearAnimals')}>
+                        <ClearSharpIcon /> <StyledIcon><ListItemText primary="Limpar todos os animais" /></StyledIcon>
+                    </ListItem>
+                </List>
+            </Drawer>
+            {renderComponent()}
+        </Box>
+    );
 }
+
