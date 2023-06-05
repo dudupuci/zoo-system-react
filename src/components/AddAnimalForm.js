@@ -8,63 +8,96 @@ import Select from '@mui/material/Select';
 import Button from '@mui/material/Button';
 
 const AnimalForm = () => {
-  const [animalType, setAnimalType] = useState('');
+  const [type, setType] = useState('');
   const [name, setName] = useState('');
   const [weight, setWeight] = useState('');
   const [dogBreed, setDogBreed] = useState('');
-  const [dogToys, setDogToys] = useState('');
-  const [sharkMap, setSharkMap] = useState([{ key: '', value: '' }]);
+  const [toys, setToys] = useState('');
+  const [animalsEaten, setAnimalsEaten] = useState([{ key: '', value: '' }]);
   const [beakColor, setBeakColor] = useState('');
   const [ownersName, setOwnersName] = useState('');
-  const [isVaccinated, setIsVaccinated] = useState('');
+  const [vaccinated, setVaccinated] = useState('');
 
-  const handleAnimalTypeChange = (event) => {
+  const [formValues, setFormValues] = useState({
+    type: '',
+    name: '',
+    weight: '',
+    dogBreed: '',
+    toys: '',
+    animalsEaten: [{ key: '', value: '' }],
+    beakColor: '',
+    ownersName: '',
+    vaccinated: '',
+  });
+
+  const handleTypeChange = (event) => {
     const selectedType = event.target.value;
-    setAnimalType(selectedType);
+    setType(selectedType);
 
     // Reset all fields when the animal type is changed
     setName('');
     setWeight('');
     setDogBreed('');
-    setDogToys('');
-    setSharkMap([{ key: '', value: '' }]);
+    setToys('');
+    setAnimalsEaten([{ key: '', value: '' }]);
     setBeakColor('');
     setOwnersName('');
-    setIsVaccinated('');
+    setVaccinated('');
   };
 
-  const handleSharkMapChange = (index, key, value) => {
-    const updatedSharkMap = [...sharkMap];
-    updatedSharkMap[index] = { key, value };
-    setSharkMap(updatedSharkMap);
+  const handleanimalsEatenChange = (index, key, value) => {
+    const updatedanimalsEaten = [...animalsEaten];
+    updatedanimalsEaten[index] = { key, value };
+    setAnimalsEaten(updatedanimalsEaten);
   };
 
   const handleAddEntry = () => {
-    setSharkMap([...sharkMap, { key: '', value: '' }]);
+    setAnimalsEaten([...animalsEaten, { key: '', value: '' }]);
   };
 
   const handleRemoveEntry = (index) => {
-    const updatedSharkMap = [...sharkMap];
-    updatedSharkMap.splice(index, 1);
-    setSharkMap(updatedSharkMap);
+    const updatedanimalsEaten = [...animalsEaten];
+    updatedanimalsEaten.splice(index, 1);
+    setAnimalsEaten(updatedanimalsEaten);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Collect all the form data and do something with it
     const formData = {
-      animalType,
+      type,
       name,
       weight,
       dogBreed,
-      dogToys,
-      sharkMap,
+      toys,
+      animalsEaten,
       beakColor,
       ownersName,
-      isVaccinated,
+      vaccinated,
     };
-    console.log(formData);
+   
+
+    try {
+      const response = await fetch('http://localhost:8095/animals/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }, 
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        console.log('API Request has been sent.')
+        setFormValues();
+      } else {
+        console.log('An error has occurred!')
+      }
+
+    } catch(err) {
+      console.log('API Error! ', err)
+    }
+
   };
 
   return (
@@ -81,12 +114,12 @@ const AnimalForm = () => {
       <h1>Animal Registration Form</h1>
 
       <FormControl sx={{ minWidth: 225 }}>
-        <InputLabel id="animalType-label">Type</InputLabel>
+        <InputLabel id="type-label">Type</InputLabel>
         <Select
-          labelId="animalType-label"
-          id="animalType"
-          value={animalType}
-          onChange={handleAnimalTypeChange}
+          labelId="type-label"
+          id="type"
+          value={type}
+          onChange={handleTypeChange}
           label="Type"
         >
           <MenuItem value="">Select Type</MenuItem>
@@ -118,7 +151,7 @@ const AnimalForm = () => {
         }}
       />
 
-      {animalType === 'Dog' && (
+      {type === 'Dog' && (
         <>
           <TextField
             id="dogBreed"
@@ -131,10 +164,10 @@ const AnimalForm = () => {
           />
 
           <TextField
-            id="dogToys"
+            id="toys"
             label="Dog Toys"
-            value={dogToys}
-            onChange={(e) => setDogToys(e.target.value)}
+            value={toys}
+            onChange={(e) => setToys(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}
@@ -142,10 +175,10 @@ const AnimalForm = () => {
         </>
       )}
 
-      {animalType === 'Shark' && (
+      {type === 'Shark' && (
         <>
           <label>Animais Devorados:</label>
-          {sharkMap.map((entry, index) => (
+          {animalsEaten.map((entry, index) => (
             <div key={index}>
               <TextField
                 type="text"
@@ -154,13 +187,13 @@ const AnimalForm = () => {
                 InputLabelProps={{
                   shrink: true,
                 }}
-                onChange={(e) => handleSharkMapChange(index, e.target.value, entry.value)}
+                onChange={(e) => handleanimalsEatenChange(index, e.target.value, entry.value)}
               />
               <TextField
                 type="text"
                 placeholder="Quantidade"
                 value={entry.value}
-                onChange={(e) => handleSharkMapChange(index, entry.key, e.target.value)}
+                onChange={(e) => handleanimalsEatenChange(index, entry.key, e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -176,13 +209,13 @@ const AnimalForm = () => {
               </Button>
             </div>
           ))}
-          <Button variant="contained" onClick={handleAddEntry} disabled={sharkMap.length === 5}>
+          <Button variant="contained" onClick={handleAddEntry} disabled={animalsEaten.length === 5}>
             Add Entry
           </Button>
         </>
       )}
 
-      {animalType === 'Bird' && (
+      {type === 'Bird' && (
         <TextField
           id="beakColor"
           label="Beak Color"
@@ -194,7 +227,7 @@ const AnimalForm = () => {
         />
       )}
 
-      {animalType === 'Cat' && (
+      {type === 'Cat' && (
         <>
           <TextField
             id="ownersName"
@@ -207,10 +240,10 @@ const AnimalForm = () => {
           />
 
           <TextField
-            id="isVaccinated"
+            id="vaccinated"
             label="Is Vaccinated?"
-            value={isVaccinated}
-            onChange={(e) => setIsVaccinated(e.target.value)}
+            value={vaccinated}
+            onChange={(e) => setVaccinated(e.target.value)}
             InputLabelProps={{
               shrink: true,
             }}

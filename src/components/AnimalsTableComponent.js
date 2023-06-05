@@ -52,11 +52,9 @@ export default function CustomizedTables() {
     ownersName: '',
     dogBread: '',
     toys: [],
-    animalsEaten: {
-      key: '',
-      value: ''
-    }
+    animalsEaten: new Map(),
   };
+  
 
 
   const [animals, setAnimals] = React.useState([]);
@@ -67,7 +65,7 @@ export default function CustomizedTables() {
     fetch(animalsApi)
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        console.log(data);
         setAnimals(data);
       })
       .catch(err => {
@@ -75,9 +73,8 @@ export default function CustomizedTables() {
       });
   }, []);
 
-
   return (
-    <TableContainer component={Paper} style={{ width: '100%', borderRadius: '0'}}>
+    <TableContainer component={Paper} style={{ width: '100%', borderRadius: '0' }}>
       <Table aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -89,6 +86,8 @@ export default function CustomizedTables() {
             <StyledTableCell align="right">Vaccinated</StyledTableCell>
             <StyledTableCell align="right">Owner's Name</StyledTableCell>
             <StyledTableCell align="right">Dog Bread</StyledTableCell>
+            <StyledTableCell align="right">Toys</StyledTableCell>
+            <StyledTableCell align="right">Animals Eaten</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -100,10 +99,22 @@ export default function CustomizedTables() {
               <StyledTableCell align="right">{animal.id}</StyledTableCell>
               <StyledTableCell align="right">{animal.name}</StyledTableCell>
               <StyledTableCell align="right">{animal.weight}</StyledTableCell>
-              <StyledTableCell align="right">{animal.hasOwnProperty('beakColor') ? (animal.beakColor) : '-'}</StyledTableCell>
-              <StyledTableCell align="right">{animal.hasOwnProperty('vaccinated') ? (animal.vaccinated ? 'Yes' : 'No'): '-'}</StyledTableCell>
-              <StyledTableCell align="right">{animal.hasOwnProperty('ownersName') ? (animal.ownersName): '-'}</StyledTableCell>
-              <StyledTableCell align="right">{animal.hasOwnProperty('dogBread')? (animal.dogBread) : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('beakColor') ? animal.beakColor : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('vaccinated') ? (animal.vaccinated ? 'Yes' : 'No') : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('ownersName') ? animal.ownersName : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('dogBread') ? animal.dogBread : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('toys')     ? Array.from(animal.toys).join(', ') : '-'}</StyledTableCell>
+              <StyledTableCell align="right">
+                {animal.hasOwnProperty('animalsEaten') ? (
+                  <div>
+                    {Object.entries(animal.animalsEaten).map(([key, value]) => (
+                      <div key={key}>
+                        <span>{key}: {value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : '-'}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>

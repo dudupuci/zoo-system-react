@@ -21,6 +21,8 @@ import EditSharpIcon from '@mui/icons-material/EditSharp';
 import ClearSharpIcon from '@mui/icons-material/ClearSharp';
 import FormPropsTextFields from './components/AddAnimalForm';
 
+import { useEffect } from 'react';
+
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -84,9 +86,33 @@ const RemoveAnimal = () => {
 }
 
 const ClearAnimals = () => {
-    return <div>Limpa todos os animais do BD</div>
-}
-
+    useEffect(() => {
+      const clearData = async () => {
+        try {
+          const response = await fetch('http://localhost:8095/animals/clear', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+          });
+          if (response.ok) {
+            // Dados apagados com sucesso
+            console.log('Dados apagados com sucesso');
+          } else {
+            // Erro ao apagar os dados
+            console.log('Erro ao apagar os dados');
+          }
+        } catch (error) {
+          // Erro na requisição
+          console.log('Erro na requisição', error);
+        }
+      };
+      
+      clearData();
+    }, []);
+  
+    return null;
+  }
 
 export default function SearchAppBar() {
     const [isDrawerOpen, setIsDrawerOpen] = React.useState(false);
