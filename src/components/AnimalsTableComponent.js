@@ -7,6 +7,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Box, Typography } from '@mui/material';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -28,18 +33,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
-
 export default function CustomizedTables() {
 
   const animal = {
@@ -54,14 +47,32 @@ export default function CustomizedTables() {
     toys: [],
     animalsEaten: new Map(),
   };
-  
 
 
   const [animals, setAnimals] = React.useState([]);
   const animalsApi = "http://localhost:8095/animals"
 
+
+  // MUI ALERT START
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+
   React.useEffect(() => {
-    // Fazer a chamada para o backend
+    if (animals.length === 0) {
+      setOpenSnackbar(true);
+    }
+  }, [animals]);
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  // MUI ALERT END
+
+  React.useEffect(() => {
+
     fetch(animalsApi)
       .then(response => response.json())
       .then(data => {
@@ -72,6 +83,21 @@ export default function CustomizedTables() {
         console.log('Error trying to GET Animals API: ', err);
       });
   }, []);
+
+  if (animals.length === 0) {
+    return (
+      <Box sx={{ margin: '100px' }}>
+        <Typography variant="h1" align="center" style={{ color: 'black', fontSize: '50px', backgroundColor: 'rgba(0, 0, 0, 0.3)', padding: '10px 20px', borderRadius: '10px', display: 'inline-block' }}>Internal Server Error</Typography>
+        <Typography variant="h3" align="center" style={{ fontSize: '25px' }}>Animals not found</Typography>
+        <SentimentVeryDissatisfiedIcon color="primary" style={{ fontSize: 100 }} />
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+        <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity="error">
+          Verifique a conexão com o sistema
+        </MuiAlert>
+      </Snackbar>
+      </Box>
+    );
+  }
 
   return (
     <TableContainer component={Paper} style={{ width: '100%', borderRadius: '0' }}>
@@ -103,7 +129,7 @@ export default function CustomizedTables() {
               <StyledTableCell align="right">{animal.hasOwnProperty('vaccinated') ? (animal.vaccinated ? 'Yes' : 'No') : '-'}</StyledTableCell>
               <StyledTableCell align="right">{animal.hasOwnProperty('ownersName') ? animal.ownersName : '-'}</StyledTableCell>
               <StyledTableCell align="right">{animal.hasOwnProperty('dogBread') ? animal.dogBread : '-'}</StyledTableCell>
-              <StyledTableCell align="right">{animal.hasOwnProperty('toys')     ? Array.from(animal.toys).join(', ') : '-'}</StyledTableCell>
+              <StyledTableCell align="right">{animal.hasOwnProperty('toys') ? Array.from(animal.toys).join(', ') : '-'}</StyledTableCell>
               <StyledTableCell align="right">
                 {animal.hasOwnProperty('animalsEaten') ? (
                   <div>

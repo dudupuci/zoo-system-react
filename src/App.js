@@ -1,15 +1,22 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Login from './components/Login';
 import Home from './Home';
-import { useState } from 'react';
-
-import Button from '@mui/material/Button';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
 
   return (
     <div className="App">
-      <Home />
+      {loggedIn ? (
+        <Home />
+      ) : (
+        <Login onLogin={handleLogin} />
+      )}
     </div>
   );
 }
